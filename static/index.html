@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RaceWars</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="title">RaceWars</h2>
+      <div class="game">
+        <button class="close-btn hidden" id="close-btn">X</button>
+        <button class="save-btn hidden" id="save-track">Save</button>
+        <div class="game__menu" id="game-menu">
+          <button class="close-btn hidden" id="close-btn-inner">X</button>
+          <div class="menu__inner" id="main">
+            <button class="btn" id="start-btn">Start</button>
+            <button class="btn" id="track-editor-btn">Track Editor</button>
+            <button class="btn" id="car-settings-btn">Car Settings</button>
+            <button class="btn" id="best-laps-btn">Best laps</button>
+          </div>
+          <div class="menu__inner hidden" id="car-settings">
+            <div class="settings">
+              <form class="form" id="form"  action="#">
+                <label for="carName">Name</label>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  name="carName"
+                  id="carName"
+                  required
+                />
+                <label for="carColor">Car color</label>
+                <input
+                  type="color"
+                  placeholder="Car color"
+                  name="carColor"
+                  id="carColor"
+                  required
+                />
+                <label for="carRoof">Roof color</label>
+                <input
+                  type="color"
+                  placeholder="Roof color"
+                  name="carRoof"
+                  id="carRoof"
+                  required
+                />
+                <label for="carTrack">Color of tire tracks</label>
+                <input
+                  type="color"
+                  placeholder="Color of tire tracks"
+                  name="carTrack"
+                  id="carTrack"
+                  required
+                />
+                <button class="btn" type="submit">Save</button>
+              </form>
+              <div id="demo-car">
+                <div id="demo-roof"></div>
+              </div>
+            </div>
+          </div>
+          <div class="menu__inner hidden" id="best-laps">
+            <h3 class="header">Best laps</h3>
+            <div class="table-wrapper">
+              <table class="table" id="myTable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Best Lap</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="game__info">
+          <p id="laps">Laps: 0</p>
+          <p id="timer">Timer: 0 s</p>
+          <p id="last-lap">Last lap: 0 s</p>
+        </div>
+        <div class="game__framerate">
+          <p id="fps">FPS: 0</p>
+        </div>
+        <canvas id="board"></canvas>
+      </div>
+      <div class="guide">
+        <span class="key">w</span><span class="key">a</span>
+        <span class="key">s</span>
+        <span class="key">d</span>
+        <span class="key">esc</span>
+      </div>
+    </div>
+    <script src="/static/js/classes/car.js"></script>
+    <script src="/static/js/classes/track.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/drawTrack.js"></script>
+    <script src="/static/js/drawCar.js"></script>
+    <script src="/static/js/move.js"></script>
+    <script src="/static/js/menu.js"></script>
+    <script src="/static/game.js"></script>
+  </body>
+</html>
