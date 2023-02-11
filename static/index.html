@@ -4,20 +4,26 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RaceWars</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap"
+      type="image/x-icon"
+      href="./static/img/favicon.ico"
+      rel="shortcut icon"
+    />
+    <link type="Image/x-icon" href="./static/img/favicon.ico" rel="icon" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/style.css" />
     <script src="/socket.io/socket.io.js"></script>
+    <title>RaceWars</title>
   </head>
   <body>
     <div class="container">
       <h2 class="title">RaceWars</h2>
       <div class="game">
         <button class="close-btn hidden" id="close-btn">X</button>
-        <button class="save-btn hidden" id="save-track">Save</button>
+        <button class="save-track-btn hidden" id="save-track-btn">Save</button>
         <div class="game__menu" id="game-menu">
           <button class="close-btn hidden" id="close-btn-inner">X</button>
           <div class="menu__inner" id="main">
@@ -28,7 +34,7 @@
           </div>
           <div class="menu__inner hidden" id="car-settings">
             <div class="settings">
-              <form class="form" id="form"  action="#">
+              <form class="form" id="form" action="#">
                 <label for="carName">Name</label>
                 <input
                   type="text"
@@ -88,25 +94,13 @@
           <p id="timer">Timer: 0 s</p>
           <p id="last-lap">Last lap: 0 s</p>
         </div>
-        <div class="game__framerate">
-          <p id="fps">FPS: 0</p>
-        </div>
         <canvas id="board"></canvas>
       </div>
       <div class="guide">
-        <span class="key">w</span><span class="key">a</span>
-        <span class="key">s</span>
-        <span class="key">d</span>
-        <span class="key">esc</span>
+        <span class="key">w</span><span class="key">a</span
+        ><span class="key">s</span><span class="key">d</span>
       </div>
     </div>
-    <script src="/static/js/classes/car.js"></script>
-    <script src="/static/js/classes/track.js"></script>
-    <script src="/static/js/utils.js"></script>
-    <script src="/static/js/drawTrack.js"></script>
-    <script src="/static/js/drawCar.js"></script>
-    <script src="/static/js/move.js"></script>
-    <script src="/static/js/menu.js"></script>
-    <script src="/static/game.js"></script>
+    <script type="module" src="/static/game.js"></script>
   </body>
 </html>

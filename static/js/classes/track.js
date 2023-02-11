@@ -1,22 +1,22 @@
-class Track {
-  constructor() {
+export default class Track {
+  constructor(canvas) {
     this.points = null
     this.coords
     this.trackLine1
     this.trackLine2
     this.movingPointIndex = -1
+    this.capturedPoint = false
     this.trackWidth = 40
     this.editorMode = false
     this.checkPoints = [null, null, null]
-    canvas.addEventListener('mousedown', this.mouseDown.bind(this))
-    canvas.addEventListener('mousemove', this.mouseMove.bind(this))
-    canvas.addEventListener('mouseup', this.mouseUp.bind(this))
+    this.carRespawn = {}
   }
 
   update() {
     this.updatePoints()
     this.coords = this.computeBezierCurve(this.points)
     this.updateCheckPoints()
+    this.updateCarRespawn()
     this.trackLine1 = this.computeTrackLine(this.coords, this.trackWidth)
     this.trackLine2 = this.computeTrackLine(this.coords, -this.trackWidth)
   }
@@ -36,6 +36,25 @@ class Track {
     this.checkPoints[0] = this.coords[7]
     this.checkPoints[1] = this.coords[Math.floor(this.coords.length / 4)]
     this.checkPoints[2] = this.coords[Math.floor(this.coords.length / 1.5)]
+  }
+
+  updateCarRespawn() {
+    const offset = 50
+    const point1 = this.coords[this.coords.length - offset]
+    const point2 = this.coords[this.coords.length - offset + 1]
+    if (point1 && point2) {
+      this.carRespawn.point = point2
+      this.carRespawn.rotationAngle = Math.atan2(
+        point2.y - point1.y,
+        point2.x - point1.x
+      )
+    }
+  }
+
+  subscribeToEvents(canvas) {
+    canvas.addEventListener('mousedown', this.mouseDown.bind(this))
+    canvas.addEventListener('mousemove', this.mouseMove.bind(this))
+    canvas.addEventListener('mouseup', this.mouseUp.bind(this))
   }
 
   computeTrackLine(coords, ratio) {
@@ -87,11 +106,11 @@ class Track {
     })
 
     if (this.points[this.movingPointIndex] && this.editorMode) {
-      ctx.capturing = true
+      this.capturedPoint = true
     }
   }
   mouseMove(event) {
-    if (ctx.capturing) {
+    if (this.capturedPoint) {
       this.points[this.movingPointIndex].x = event.offsetX
       this.points[this.movingPointIndex].y = event.offsetY
       if (this.movingPointIndex % 3 === 0) {
@@ -107,11 +126,11 @@ class Track {
             event.offsetY - this.points[this.movingPointIndex].y
         }
       }
+      this.update()
     }
-    this.update()
   }
 
   mouseUp(event) {
-    ctx.capturing = false
+    this.capturedPoint = false
   }
 }

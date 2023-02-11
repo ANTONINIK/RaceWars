@@ -39,6 +39,4 @@ window.addEventListener('keyup', event => {
   }
 })
 
-setInterval(() => {
-  socket.emit('movement', movement)
-}, 1000 / 75)
+export default movement

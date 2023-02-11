@@ -1,4 +1,6 @@
-function drawCar(ctx, car) {
+import { rotatedObject } from "./utils.js"
+
+export default function drawCar(ctx, car) {
   drawTireTracks(ctx, car.width, car.height, car.tireTracks, car.color.track)
 
   ctx.beginPath()

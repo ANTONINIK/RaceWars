@@ -1,4 +1,4 @@
-function drawTrack(ctx, track, editorMode) {
+export default function drawTrack(ctx, track, editorMode) {
   track.editorMode = editorMode
   drawCurve(ctx, track.trackLine1)
   drawCurve(ctx, track.trackLine2)

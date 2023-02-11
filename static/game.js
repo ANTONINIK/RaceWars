@@ -1,46 +1,29 @@
+import drawCar from './js/drawCar.js'
+import drawTrack from './js/drawTrack.js'
+import movement from './js/move.js'
+import { gameMode } from './js/menu.js'
+import { playerCar, enemyCars, track } from './js/entities.js'
+
 const WIDTH = 512
 const HEIGHT = 288
 const DPI_WIDTH = WIDTH * 2
 const DPI_HEIGHT = HEIGHT * 2
-const framerate = document.getElementById('fps')
 const canvas = document.getElementById('board')
 const ctx = canvas.getContext('2d')
 canvas.style.width = WIDTH
 canvas.style.height = HEIGHT
 canvas.width = DPI_WIDTH
 canvas.height = DPI_HEIGHT
-const socket = io()
+track.subscribeToEvents(canvas)
 
-const playerCar = new Car({
-  id: socket.id,
-  name: 'Anonymous'
-})
-
-let track = new Track()
-let enemyCars = null
-
-socket.on('track', points => {
-  track.points = points
-  track.update()
-})
-
-socket.on('state', state => (enemyCars = state))
-
-socket.on('bestLaps', data => {
-  mapBestLaps = new Map(JSON.parse(data))
-  mapBestLaps = new Map([...mapBestLaps.entries()].sort((a, b) => a[1] - b[1]))
-})
-
-function animate(timestamp) {
+function animate() {
   window.requestAnimationFrame(animate)
-  const currentTime = timestamp
 
   //draw background
   ctx.beginPath()
   ctx.fillStyle = 'rgb(36, 38, 48)'
   ctx.fillRect(0, 0, DPI_WIDTH, DPI_HEIGHT)
   ctx.closePath()
-
   switch (gameMode) {
     case 0:
       //track
@@ -50,18 +33,18 @@ function animate(timestamp) {
       playerCar.controller(movement)
       playerCar.update()
       playerCar.collision(track)
-      socket.emit('update', playerCar) //update
+
       if (playerCar) {
         drawCar(ctx, playerCar)
       }
 
       //telemetry
-      telemetry.start(playerCar, track.checkPoints, socket)
+      //telemetry.start(playerCar, track.checkPoints, socket)
 
       //enemy
       if (enemyCars) {
         for (const id in enemyCars) {
-          if (socket.id != id) {
+          if (playerCar.id !== id) {
             const enemyCar = enemyCars[id]
             drawCar(ctx, enemyCar, false)
           }
@@ -72,15 +55,8 @@ function animate(timestamp) {
       drawTrack(ctx, track, true)
       break
     default:
-      telemetry.stop()
+      //telemetry.stop()
   }
-  if (lastTime) {
-    framerate.textContent = `FPS: ${(1000 / (currentTime - lastTime)).toFixed(
-      1
-    )}`
-  }
-  lastTime = currentTime
 }
 
-let lastTime = null
 animate()

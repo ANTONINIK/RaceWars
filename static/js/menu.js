@@ -1,125 +1,65 @@
-const gameMenu = document.getElementById('game-menu')
-
-const main = document.getElementById('main')
-const carSettings = document.getElementById('car-settings')
-const bestLaps = document.getElementById('best-laps')
+import { playerCar, mapBestLaps, updateTrack } from './entities.js'
 
 const closeBtn = document.getElementById('close-btn')
 const closeBtnIn = document.getElementById('close-btn-inner')
-const saveTrack = document.getElementById('save-track')
+closeBtn.addEventListener('click', openMenu)
+closeBtnIn.addEventListener('click', () => {
+  toggleSecondMenu()
+  carSettings.classList.add('hidden')
+  bestLaps.classList.add('hidden')
+})
+
 const startBtn = document.getElementById('start-btn')
+startBtn.addEventListener('click', () => {
+  gameMode = 0
+  toggleMainMenu()
+})
+
 const trackEditorBtn = document.getElementById('track-editor-btn')
-const carSettingsBtn = document.getElementById('car-settings-btn')
-const bestLapsBtn = document.getElementById('best-laps-btn')
+trackEditorBtn.addEventListener('click', () => {
+  gameMode = 1
+  toggleMainMenu()
+  saveTrackBtn.classList.toggle('hidden')
+})
+const saveTrackBtn = document.getElementById('save-track-btn')
+saveTrackBtn.addEventListener('click', () => {
+  openMenu()
+  updateTrack()
+})
 
 const carName = document.getElementById('carName')
 const carColor = document.getElementById('carColor')
 const carRoof = document.getElementById('carRoof')
 const carTrack = document.getElementById('carTrack')
-
 const demoCar = document.getElementById('demo-car')
 const demoRoof = document.getElementById('demo-roof')
-
-const form = document.getElementById('form')
-
-const tbodyRef = document
-  .getElementById('myTable')
-  .getElementsByTagName('tbody')[0]
-
-let gameMode = -1
-let mapBestLaps = null
-
-document.addEventListener('keydown', event => {
-  if (event.key === 'Escape') {
-    const isNotCombinedKey = !(event.ctrlKey || event.altKey || event.shiftKey)
-    if (isNotCombinedKey) {
-      gameMode = -1
-      gameMenu.classList.remove('hidden')
-      main.classList.remove('hidden')
-      carSettings.classList.add('hidden')
-      bestLaps.classList.add('hidden')
-      closeBtn.classList.add('hidden')
-      closeBtnIn.classList.add('hidden')
-      saveTrack.classList.add('hidden')
-    }
-  }
+const carSettings = document.getElementById('car-settings')
+const carSettingsBtn = document.getElementById('car-settings-btn')
+carSettingsBtn.addEventListener('click', () => {
+  gameMode = 2
+  toggleSecondMenu()
+  carSettings.classList.toggle('hidden')
+  carName.value = playerCar.name
+  carTrack.value = playerCar.color.track
+  demoCar.style.background = carColor.value = playerCar.color.car
+  demoRoof.style.background = carRoof.value = playerCar.color.roof
 })
-
+const form = document.getElementById('form')
 form.addEventListener('submit', event => {
   event.preventDefault()
   playerCar.name = carName.value
-  playerCar.color.car = carColor.value
-  playerCar.color.roof = carRoof.value
   playerCar.color.track = carTrack.value
-  demoCar.style.background = playerCar.color.car
-  demoRoof.style.background = playerCar.color.roof
+  demoCar.style.background = playerCar.color.car = carColor.value
+  demoRoof.style.background = playerCar.color.roof = carRoof.value
 })
 
-closeBtn.addEventListener('click', event => {
-  gameMode = -1
-  gameMenu.classList.remove('hidden')
-  main.classList.remove('hidden')
-  carSettings.classList.add('hidden')
-  bestLaps.classList.add('hidden')
-  closeBtn.classList.add('hidden')
-  closeBtnIn.classList.add('hidden')
-})
-
-closeBtnIn.addEventListener('click', event => {
-  gameMode = -1
-  gameMenu.classList.remove('hidden')
-  main.classList.remove('hidden')
-  carSettings.classList.add('hidden')
-  bestLaps.classList.add('hidden')
-  closeBtn.classList.add('hidden')
-  closeBtnIn.classList.add('hidden')
-})
-
-saveTrack.addEventListener('click', event => {
-  gameMode = -1
-  gameMenu.classList.remove('hidden')
-  main.classList.remove('hidden')
-  carSettings.classList.add('hidden')
-  bestLaps.classList.add('hidden')
-  closeBtn.classList.add('hidden')
-  closeBtnIn.classList.add('hidden')
-  saveTrack.classList.add('hidden')
-  socket.emit('new track', track.points)
-})
-
-startBtn.addEventListener('click', event => {
-  gameMode = 0
-  gameMenu.classList.add('hidden')
-  main.classList.add('hidden')
-  closeBtn.classList.remove('hidden')
-})
-
-trackEditorBtn.addEventListener('click', event => {
-  gameMode = 1
-  gameMenu.classList.add('hidden')
-  main.classList.add('hidden')
-  closeBtn.classList.remove('hidden')
-  saveTrack.classList.remove('hidden')
-})
-
-carSettingsBtn.addEventListener('click', event => {
-  gameMode = 2
-  main.classList.add('hidden')
-  carSettings.classList.remove('hidden')
-  closeBtnIn.classList.remove('hidden')
-  carName.value = playerCar.name
-  carColor.value = playerCar.color.car
-  carRoof.value = playerCar.color.roof
-  carTrack.value = playerCar.color.track
-  demoCar.style.background = carColor.value
-  demoRoof.style.background = carRoof.value
-})
-
-bestLapsBtn.addEventListener('click', event => {
+const tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0]
+const bestLaps = document.getElementById('best-laps')
+const bestLapsBtn = document.getElementById('best-laps-btn')
+bestLapsBtn.addEventListener('click', () => {
   gameMode = 3
-  main.classList.add('hidden')
-  bestLaps.classList.remove('hidden')
-  closeBtnIn.classList.remove('hidden')
+  toggleSecondMenu()
+  bestLaps.classList.toggle('hidden')
   if (mapBestLaps) {
     const table = document.getElementById('myTable')
     const rowCount = table.rows.length
@@ -137,3 +77,24 @@ bestLapsBtn.addEventListener('click', event => {
     })
   }
 })
+
+const gameMenu = document.getElementById('game-menu')
+const main = document.getElementById('main')
+function toggleMainMenu() {
+  gameMenu.classList.toggle('hidden')
+  closeBtn.classList.toggle('hidden')
+  closeBtnIn.classList.toggle('hidden')
+  saveTrackBtn.classList.add('hidden')
+}
+
+function toggleSecondMenu() {
+  main.classList.toggle('hidden')
+  closeBtnIn.classList.toggle('hidden')
+}
+
+function openMenu() {
+  gameMode = -1
+  toggleMainMenu()
+}
+
+export let gameMode = -1

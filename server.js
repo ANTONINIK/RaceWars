@@ -56,7 +56,7 @@ setInterval(() => {
   if (cars && io) {
     io.sockets.emit('state', cars)
   }
-}, 1000 / 60)
+}, 1000 / 10)
 
 setInterval(() => {
   if (bestLaps.size > 0 && io) {

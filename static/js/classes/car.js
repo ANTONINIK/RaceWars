@@ -1,19 +1,21 @@
+import { rotatedObject, vectorLength } from '../utils.js'
+
 const X_GRIP_FORCE = 0.95
 const Y_GRIP_FORCE = 0.94
 const TURN_FORCE = 0.04
 const FRICTION_FORCE = 0.045
 const BRAKING = 0.1
-const ACCELERATION = 0.225
+const ACCELERATION = 0.2
 const MAX_FRICTION = 0
 const TURN_LIMITER = 0.2
 
-class Car {
+export default class Car {
   constructor(props) {
     this.name = props.name
     this.id = props.id
     this.position = {
-      x: 75,
-      y: 200
+      x: 0,
+      y: 0
     }
     this.width = 30
     this.height = 15
@@ -32,6 +34,7 @@ class Car {
       roof: '#FF0000',
       track: '#808080'
     }
+    this.respawn = null
   }
 
   saveTireTracks() {
@@ -45,6 +48,13 @@ class Car {
         this.tireTracks.shift()
       }
     }
+  }
+
+  setRespawn(newResp) {
+    this.respawn = newResp
+    this.position.x = newResp.point.x
+    this.position.y = newResp.point.y
+    this.rotationAngle = newResp.rotationAngle
   }
 
   update() {
@@ -87,11 +97,11 @@ class Car {
         (Math.abs(track.trackLine2[i].x - this.position.x) < 3 &&
           Math.abs(track.trackLine2[i].y - this.position.y) < 3)
       ) {
-        this.position.x = 75
-        this.position.y = 200
+        this.position.x = this.respawn.point.x
+        this.position.y = this.respawn.point.y
+        this.rotationAngle = this.respawn.rotationAngle
         this.acceleration.x = 0
         this.acceleration.y = 0
-        this.rotationAngle = 30
       }
     }
   }
