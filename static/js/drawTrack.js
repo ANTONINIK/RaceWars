@@ -58,7 +58,7 @@ function drawFinish(ctx, trackLine1, trackLine2) {
   ctx.closePath()
 }
 
-function drawCheckPoints(checkPoints) {
+function drawCheckPoints(ctx, checkPoints) {
   checkPoints.forEach(checkPoint => {
     ctx.beginPath()
     ctx.arc(checkPoint.x, checkPoint.y, 40, 0, 2 * Math.PI, false)

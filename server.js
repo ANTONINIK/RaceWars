@@ -6,7 +6,6 @@ const path = require('path')
 const port = '8080'
 let trackPoints = require('./trackConfig.js')
 
-
 app.set('port', port)
 
 app.use('/static', express.static(__dirname + '/static'))
@@ -15,7 +14,7 @@ app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname + '/static', 'index.html'))
 })
 
-server.listen(port, () => {
+server.listen(port, '192.168.1.238', () => {
   console.log(`http://localhost:${port}`)
 })
 
@@ -39,8 +38,9 @@ io.on('connection', socket => {
 
   socket.on('new lap', data => {
     if (bestLaps.has(data.name)) {
-      if (bestLaps.get(data.name) > data.time)
+      if (bestLaps.get(data.name) > Number(data.time)) {
         bestLaps.set(data.name, data.time)
+      }
     } else {
       bestLaps.set(data.name, data.time)
     }
@@ -56,7 +56,7 @@ setInterval(() => {
   if (cars && io) {
     io.sockets.emit('state', cars)
   }
-}, 1000 / 10)
+}, 1000 / 15)
 
 setInterval(() => {
   if (bestLaps.size > 0 && io) {

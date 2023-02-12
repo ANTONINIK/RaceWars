@@ -1,4 +1,4 @@
-import { rotatedObject } from "./utils.js"
+import { rotatedObject } from './utils.js'
 
 export default function drawCar(ctx, car) {
   drawTireTracks(ctx, car.width, car.height, car.tireTracks, car.color.track)
@@ -6,7 +6,11 @@ export default function drawCar(ctx, car) {
   ctx.beginPath()
   ctx.fillStyle = 'white'
   ctx.font = '16px Oswald'
-  ctx.fillText(car.name, car.position.x - (car.name.length * 4), car.position.y - 40)
+  ctx.fillText(
+    car.name,
+    car.position.x - car.name.length * 4,
+    car.position.y - 40
+  )
   ctx.closePath()
 
   ctx.beginPath()
@@ -24,7 +28,13 @@ export default function drawCar(ctx, car) {
   ctx.fillStyle = car.color.roof
   ctx.translate(car.position.x, car.position.y)
   ctx.rotate(car.rotationAngle)
-  ctx.roundRect(-car.width / 2 + 3, -car.height / 2 +2, car.width/2, car.height - 4, [3])
+  ctx.roundRect(
+    -car.width / 2 + 3,
+    -car.height / 2 + 2,
+    car.width / 2,
+    car.height - 4,
+    [3]
+  )
   ctx.fill()
   ctx.restore()
   ctx.closePath()

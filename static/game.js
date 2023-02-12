@@ -2,7 +2,7 @@ import drawCar from './js/drawCar.js'
 import drawTrack from './js/drawTrack.js'
 import movement from './js/move.js'
 import { gameMode } from './js/menu.js'
-import { playerCar, enemyCars, track } from './js/entities.js'
+import { playerCar, enemyCars, track, telemetry } from './js/entities.js'
 
 const WIDTH = 512
 const HEIGHT = 288
@@ -16,8 +16,14 @@ canvas.width = DPI_WIDTH
 canvas.height = DPI_HEIGHT
 track.subscribeToEvents(canvas)
 
-function animate() {
+let previousTimeStamp = null
+function animate(timestamp) {
   window.requestAnimationFrame(animate)
+  if (previousTimeStamp == null) {
+    previousTimeStamp = timestamp
+  }
+  let dt = (timestamp - previousTimeStamp) / 1000
+  previousTimeStamp = timestamp
 
   //draw background
   ctx.beginPath()
@@ -30,32 +36,30 @@ function animate() {
       drawTrack(ctx, track, false)
 
       //player
-      playerCar.controller(movement)
-      playerCar.update()
-      playerCar.collision(track)
 
       if (playerCar) {
         drawCar(ctx, playerCar)
+        playerCar.controller(dt, movement)
+        playerCar.update(dt)
+        playerCar.collision(track)
       }
 
-      //telemetry
-      //telemetry.start(playerCar, track.checkPoints, socket)
+      telemetry.start(playerCar, track)
 
-      //enemy
       if (enemyCars) {
-        for (const id in enemyCars) {
-          if (playerCar.id !== id) {
-            const enemyCar = enemyCars[id]
-            drawCar(ctx, enemyCar, false)
-          }
-        }
+        enemyCars.forEach(({ car, movement }) => {
+          drawCar(ctx, car)
+          car.controller(dt, movement)
+          car.update(dt)
+        })
       }
       break
     case 1:
       drawTrack(ctx, track, true)
       break
     default:
-      //telemetry.stop()
+      playerCar.backToRespawn()
+      telemetry.stop()
   }
 }
 

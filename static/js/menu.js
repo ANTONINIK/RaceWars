@@ -1,4 +1,5 @@
 import { playerCar, mapBestLaps, updateTrack } from './entities.js'
+import { setStorageUser } from './storage.js'
 
 const closeBtn = document.getElementById('close-btn')
 const closeBtnIn = document.getElementById('close-btn-inner')
@@ -51,9 +52,12 @@ form.addEventListener('submit', event => {
   playerCar.color.track = carTrack.value
   demoCar.style.background = playerCar.color.car = carColor.value
   demoRoof.style.background = playerCar.color.roof = carRoof.value
+  setStorageUser(playerCar.name, playerCar.color)
 })
 
-const tbodyRef = document.getElementById('myTable').getElementsByTagName('tbody')[0]
+const tbodyRef = document
+  .getElementById('myTable')
+  .getElementsByTagName('tbody')[0]
 const bestLaps = document.getElementById('best-laps')
 const bestLapsBtn = document.getElementById('best-laps-btn')
 bestLapsBtn.addEventListener('click', () => {
@@ -72,7 +76,7 @@ bestLapsBtn.addEventListener('click', () => {
       let newText = document.createTextNode(name)
       newCell.appendChild(newText)
       newCell = newRow.insertCell()
-      newText = document.createTextNode(time)
+      newText = document.createTextNode(time.toFixed(3))
       newCell.appendChild(newText)
     })
   }

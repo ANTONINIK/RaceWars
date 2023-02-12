@@ -1,45 +1,64 @@
+import { updateBestLap } from '../entities.js'
+
 export default class Telemetry {
   constructor() {
-    this.lastLap = []
+    this.lastLap = 0
     this.counterLaps = 0
-    ;(this.htmlLaps = document.getElementById('laps')),
-      (this.htmlTimer = document.getElementById('timer')),
-      (this.htmlLastLap = document.getElementById('last-lap')),
-      (this.telemetryId = null)
+    this.telemetryId = null
+    this.timer = 0
+    this.passedPoints = null
+    this.htmlLaps = document.getElementById('laps')
+    this.htmlTimer = document.getElementById('timer')
+    this.htmlLastLap = document.getElementById('last-lap')
   }
-  start(playerCar, trackCheckPoints, socket) {
+  start(playerCar, track) {
     if (!this.telemetryId) {
-      let passed = Array(trackCheckPoints.length).fill(false)
-      let timer = 0
+      this.display()
+      this.reset()
       this.telemetryId = setInterval(() => {
-        timer += 0.01
-        trackCheckPoints.forEach((checkPoint, index) => {
+        this.timer += 0.01
+        track.checkPoints.forEach((checkPoint, index) => {
           if (
             Math.abs(checkPoint.x - playerCar.position.x) < 40 &&
             Math.abs(checkPoint.y - playerCar.position.y) < 40
           ) {
-            if (index === 0 && passed[1] && passed[2]) {
-              this.lastLap = timer
-              this.counterLaps++
-              this.update(socket, playerCar.name)
-              timer = 0
-              passed = Array(track.checkPoints.length).fill(false)
-            } else {
-              passed[index] = true
+            if (index === 0) {
+              if (
+                this.passedPoints[0] &&
+                this.passedPoints[1] &&
+                this.passedPoints[2]
+              ) {
+                this.lastLap = this.timer
+                this.counterLaps++
+                this.update(playerCar.name)
+              }
+              this.reset()
             }
+            this.passedPoints[index] = true
           }
         })
-        this.htmlTimer.textContent = `Timer: ${timer.toFixed(2)} s`
+        this.htmlTimer.textContent = `Timer: ${this.timer.toFixed(2)} s`
       }, 10)
     }
   }
   stop() {
     clearInterval(this.telemetryId)
-    this.telemetryId = null
+    if (this.telemetryId !== null) {
+      this.display()
+      this.telemetryId = null
+    }
   }
-  update(socket, carName) {
+  update(name) {
     this.htmlLastLap.textContent = `Last lap: ${this.lastLap.toFixed(2)} s`
     this.htmlLaps.textContent = `Laps: ${this.counterLaps}`
-    socket.emit('new lap', { name: carName, time: this.lastLap.toFixed(3) })
+    updateBestLap(name, this.lastLap)
+  }
+  display() {
+    const gameInfo = document.getElementById('game-info')
+    gameInfo.classList.toggle('hidden')
+  }
+  reset() {
+    this.passedPoints = Array(3).fill(false)
+    if (this.timer > 1) this.timer = 0
   }
 }

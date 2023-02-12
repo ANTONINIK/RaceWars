@@ -6,7 +6,7 @@ export default class Track {
     this.trackLine2
     this.movingPointIndex = -1
     this.capturedPoint = false
-    this.trackWidth = 40
+    this.trackWidth = 45
     this.editorMode = false
     this.checkPoints = [null, null, null]
     this.carRespawn = {}
@@ -33,7 +33,7 @@ export default class Track {
   }
 
   updateCheckPoints() {
-    this.checkPoints[0] = this.coords[7]
+    this.checkPoints[0] = this.coords[9]
     this.checkPoints[1] = this.coords[Math.floor(this.coords.length / 4)]
     this.checkPoints[2] = this.coords[Math.floor(this.coords.length / 1.5)]
   }
