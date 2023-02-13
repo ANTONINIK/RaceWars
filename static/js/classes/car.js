@@ -1,11 +1,11 @@
 import { rotatedObject, vectorLength } from '../utils.js'
 
 const X_GRIP_FORCE = 0.9
-const Y_GRIP_FORCE = 1.4
+const Y_GRIP_FORCE = 1.3
 const THROTTLE = 225
-const BRAKE = 75
+const BRAKE = 130
 const TURN_FORCE = 2.4
-const FRICTION_FORCE = 1.5
+const FRICTION_FORCE = 1.3
 const MAX_FRICTION = 50
 const TURN_LIMITER = 10
 
@@ -24,7 +24,7 @@ export default class Car {
   }
 
   saveTireTracks() {
-    if (Math.abs(this.velocity.y) > 125) {
+    if (Math.abs(this.velocity.y) > 120) {
       this.tireTracks.push(
         JSON.parse(
           JSON.stringify({ point: this.position, angle: this.rotationAngle })
