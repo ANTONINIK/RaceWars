@@ -17,10 +17,6 @@ const playerCar = new Car({
     x: 0,
     y: 0
   },
-  acceleration: {
-    x: 0,
-    y: 0
-  },
   rotationAngle: 0,
   tireTracks: [],
   color: storageUser
@@ -80,7 +76,7 @@ socket.on('bestLaps', data => {
 setInterval(() => {
   if (playerCar)
     socket.emit('update', { playerCar: playerCar.getData(), movement })
-}, 1000 / 15)
+}, 1000 / 20)
 
 export function updateTrack() {
   socket.emit('new track', track.points)

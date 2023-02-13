@@ -14,7 +14,7 @@ app.get('/', (request, response) => {
   response.sendFile(path.join(__dirname + '/static', 'index.html'))
 })
 
-server.listen(port, '192.168.1.238', () => {
+server.listen(port, () => {
   console.log(`http://localhost:${port}`)
 })
 
@@ -56,7 +56,7 @@ setInterval(() => {
   if (cars && io) {
     io.sockets.emit('state', cars)
   }
-}, 1000 / 15)
+}, 1000 / 10)
 
 setInterval(() => {
   if (bestLaps.size > 0 && io) {
