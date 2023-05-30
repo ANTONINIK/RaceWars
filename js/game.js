@@ -1,8 +1,8 @@
-import drawCar from './js/drawCar.js'
-import drawTrack from './js/drawTrack.js'
-import movement from './js/move.js'
-import { gameMode } from './js/menu.js'
-import { playerCar, enemyCars, track, telemetry } from './js/entities.js'
+import drawCar from './drawCar.js'
+import drawTrack from './drawTrack.js'
+import movement from './move.js'
+import { gameMode } from './menu.js'
+import { playerCar, enemyCars, track, telemetry } from './entities.js'
 
 const WIDTH = 512
 const HEIGHT = 288
