@@ -3,10 +3,10 @@ const HEIGHT: number = 288
 const DPI_WIDTH: number = WIDTH * 2
 const DPI_HEIGHT: number = HEIGHT * 2
 
-class GameWorld implements IGameObject {
+export class GameWorld {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
-  private gameObjects: Array<IGameObject> = []
+  private gameObjects: IGameObject[] = []
 
   constructor() {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
@@ -20,14 +20,20 @@ class GameWorld implements IGameObject {
   add(gameObject: IGameObject): void {
     this.gameObjects.push(gameObject)
   }
-  remove(idx: number): void {
-    if (idx > -1) {
-      this.gameObjects.splice(idx, 1)
-    }
+  remove(): void {
+    this.gameObjects = []
   }
-  draw(ctx: CanvasRenderingContext2D): void {
+  draw(): void {
     this.gameObjects.forEach(gameObject => {
-      gameObject.draw(ctx)
+      gameObject.draw(this.context)
     })
+  }
+  startRendering(): void {
+    const renderLoop = (): void => {
+      this.draw()
+      requestAnimationFrame(renderLoop)
+    }
+
+    renderLoop()
   }
 }

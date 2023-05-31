@@ -4,6 +4,6 @@
     "target": "ES5",
     "removeComments": true,
     "sourceMap": true,
-    "outDir": "public"
+    "outDir": "dist"
   },
 }

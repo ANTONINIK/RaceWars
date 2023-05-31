@@ -1,0 +1,3 @@
+interface IGameMode {
+  execute(): void
+}
