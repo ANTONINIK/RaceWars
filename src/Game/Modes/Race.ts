@@ -1,11 +1,14 @@
-import { Car } from '../../models/Car'
-import { GameWorld } from '../../models/GameWorld'
-import { Track } from '../../models/Track'
+import { Car } from '../../models/Car.js'
+import { Track } from '../../models/Track.js'
+import { GameWorld } from '../../models/GameWorld.js'
+import { IGameMode } from './IGameMode.js'
+import { Background } from '../../models/BackGround.js'
 
 export class Race implements IGameMode {
-  execute(): void {
-    const gw: GameWorld = new GameWorld()
-    //gw.add(new Car())
-    gw.add(new Track())
+  execute(gameworld: GameWorld): void {
+    gameworld.remove()
+    gameworld.add(new Background())
+    gameworld.add(new Track())
+    gameworld.add(new Car())
   }
 }

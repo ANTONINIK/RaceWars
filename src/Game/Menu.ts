@@ -1,4 +1,7 @@
-class Menu {
+import { GameLoop } from "./GameLoop.js"
+import { Race } from "./modes/Race.js"
+
+export class Menu {
   private closeBtn: HTMLElement
   private closeBtnIn: HTMLElement
   private startBtn: HTMLElement
@@ -19,9 +22,10 @@ class Menu {
   private gameMenu: HTMLElement
   private main: HTMLElement
 
-  private gameMode: IGameMode
+  private gameLoop: GameLoop
 
   constructor() {
+    this.gameLoop = new GameLoop();
     this.closeBtn = document.getElementById('close-btn')
     this.closeBtnIn = document.getElementById('close-btn-inner')
     this.startBtn = document.getElementById('start-btn')
@@ -43,17 +47,20 @@ class Menu {
     this.bestLapsBtn = document.getElementById('best-laps-btn')
     this.gameMenu = document.getElementById('game-menu')
     this.main = document.getElementById('main')
-
-    this.closeBtnIn.addEventListener('click', () => {})
-
-    this.startBtn.addEventListener('click', () => {})
-
+    this.startBtn.addEventListener('click', () => {
+      this.toggleMainMenu()
+      this.gameLoop.setGameMode(new Race())
+      this.gameLoop.executeGameMode()
+    })
+    this.closeBtn.addEventListener('click', () => {
+      this.toggleMainMenu()
+    })
+    this.closeBtnIn.addEventListener('click', () => {
+    })
     this.trackEditorBtn.addEventListener('click', () => {})
     this.saveTrackBtn.addEventListener('click', () => {})
-
     this.carSettingsBtn.addEventListener('click', () => {})
     this.form.addEventListener('submit', () => {})
-
     this.bestLapsBtn.addEventListener('click', () => {})
   }
 

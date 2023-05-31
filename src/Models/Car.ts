@@ -1,4 +1,5 @@
-import { rotateObject } from '../utils'
+import { Storage } from '../storage/Storage.js'
+import { rotateObject } from '../utils.js'
 
 const X_GRIP_FORCE: number = 0.9
 const Y_GRIP_FORCE: number = 1.3
@@ -9,36 +10,85 @@ const FRICTION_FORCE: number = 1.3
 const MAX_FRICTION: number = 50
 const TURN_LIMITER: number = 10
 
-interface CarProps {
-  name: string
-  position: { x: number; y: number }
-  velocity: { x: number; y: number }
-  rotationAngle: number
-  tireTracks: { point: { x: number; y: number }; angle: number }[]
-  color: string
-}
-
 export class Car implements IGameObject {
   private name: string
-  private position: { x: number; y: number }
+  private position: { x: number; y: number; angle: number }
   private velocity: { x: number; y: number }
-  private rotationAngle: number
-  private tireTracks: { point: { x: number; y: number }; angle: number }[]
-  private color: string
+  private tireTracks: { x: number; y: number; angle: number }[]
+  private color: { body: string; roof: string; tireTracks: string }
   private width: number
   private height: number
 
-  constructor(props: CarProps) {
-    this.name = props.name
-    this.position = props.position
-    this.velocity = props.velocity
-    this.rotationAngle = props.rotationAngle
-    this.tireTracks = props.tireTracks
-    this.color = props.color
+  constructor() {
+    this.name = Storage.getData('CAR_NAME')
+    this.position = {
+      x: +Storage.getData('SPAWN_CAR_POSITION_X'),
+      y: +Storage.getData('SPAWN_CAR_POSITION_Y'),
+      angle: +Storage.getData('SPAWN_CAR_POSITION_ANGLE')
+    }
+    this.velocity = {
+      x: 0,
+      y: 0
+    }
+    this.tireTracks = []
+    this.color = {
+      body: Storage.getData('COLOR_CAR_BODY'),
+      roof: Storage.getData('COLOR_CAR_ROOF'),
+      tireTracks: Storage.getData('COLOR_CAR_TIRE_TRACKS')
+    }
     this.width = 30
     this.height = 15
   }
   draw(ctx: CanvasRenderingContext2D): void {
-    
+    ctx.beginPath()
+    ctx.fillStyle = 'white'
+    ctx.font = '16px Oswald'
+    ctx.fillText(
+      this.name,
+      this.position.x - this.name.length * 4,
+      this.position.y - 40
+    )
+    ctx.closePath()
+
+    ctx.beginPath()
+    ctx.save()
+    ctx.fillStyle = this.color.body
+    ctx.translate(this.position.x, this.position.y)
+    ctx.rotate(this.position.angle)
+    ctx.roundRect(-this.width / 2, -this.height / 2, this.width, this.height, [
+      5
+    ])
+    ctx.fill()
+    ctx.restore()
+    ctx.closePath()
+
+    ctx.beginPath()
+    ctx.save()
+    ctx.fillStyle = this.color.roof
+    ctx.translate(this.position.x, this.position.y)
+    ctx.rotate(this.position.angle)
+    ctx.roundRect(
+      -this.width / 2 + 3,
+      -this.height / 2 + 2,
+      this.width / 2,
+      this.height - 4,
+      [3]
+    )
+    ctx.fill()
+    ctx.restore()
+    ctx.closePath()
+
+    this.update()
+  }
+  update(): void {
+    this.velocity.x *= -X_GRIP_FORCE * Storage.deltaTime + 1
+    this.velocity.y *= -Y_GRIP_FORCE * Storage.deltaTime + 1
+    const projection = rotateObject(
+      this.velocity.x,
+      this.velocity.y,
+      this.position.angle
+    )
+    this.position.x += projection.x * Storage.deltaTime
+    this.position.y += projection.y * Storage.deltaTime
   }
 }

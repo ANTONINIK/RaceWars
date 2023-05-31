@@ -1,7 +1,4 @@
-const WIDTH: number = 512
-const HEIGHT: number = 288
-const DPI_WIDTH: number = WIDTH * 2
-const DPI_HEIGHT: number = HEIGHT * 2
+import { Storage } from "../storage/Storage.js"
 
 export class GameWorld {
   private canvas: HTMLCanvasElement
@@ -11,10 +8,10 @@ export class GameWorld {
   constructor() {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
     this.context = this.canvas.getContext('2d')
-    this.canvas.style.width = WIDTH.toString()
-    this.canvas.style.height = HEIGHT.toString()
-    this.canvas.width = DPI_WIDTH
-    this.canvas.height = DPI_HEIGHT
+    this.canvas.style.width = Storage.getData('WIDTH')
+    this.canvas.style.height = Storage.getData('HEIGHT')
+    this.canvas.width = +Storage.getData('DPI_WIDTH')
+    this.canvas.height = +Storage.getData('DPI_HEIGHT')
   }
 
   add(gameObject: IGameObject): void {
@@ -33,7 +30,6 @@ export class GameWorld {
       this.draw()
       requestAnimationFrame(renderLoop)
     }
-
     renderLoop()
   }
 }

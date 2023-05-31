@@ -2,6 +2,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "target": "ES5",
+    "module": "ES6",
     "removeComments": true,
     "sourceMap": true,
     "outDir": "dist"
