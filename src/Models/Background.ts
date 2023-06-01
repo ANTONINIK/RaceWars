@@ -12,4 +12,5 @@ export class Background implements IGameObject {
     )
     ctx.closePath()
   }
+  update(): void {}
 }

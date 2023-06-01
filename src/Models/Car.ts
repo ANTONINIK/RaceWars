@@ -1,5 +1,6 @@
 import { Storage } from '../storage/Storage.js'
-import { rotateObject } from '../utils.js'
+import { getVectorLength, rotateObject } from '../utils.js'
+import { Track } from './Track.js'
 
 const X_GRIP_FORCE: number = 0.9
 const Y_GRIP_FORCE: number = 1.3
@@ -39,6 +40,7 @@ export class Car implements IGameObject {
     this.width = 30
     this.height = 15
   }
+
   draw(ctx: CanvasRenderingContext2D): void {
     ctx.beginPath()
     ctx.fillStyle = 'white'
@@ -77,18 +79,51 @@ export class Car implements IGameObject {
     ctx.fill()
     ctx.restore()
     ctx.closePath()
-
-    this.update()
   }
+
   update(): void {
     this.velocity.x *= -X_GRIP_FORCE * Storage.deltaTime + 1
     this.velocity.y *= -Y_GRIP_FORCE * Storage.deltaTime + 1
-    const projection = rotateObject(
+    const projection: { x: number; y: number } = rotateObject(
       this.velocity.x,
       this.velocity.y,
       this.position.angle
     )
     this.position.x += projection.x * Storage.deltaTime
     this.position.y += projection.y * Storage.deltaTime
+  }
+
+  turnLeft() {
+    if (getVectorLength(this.velocity.x, this.velocity.y) > TURN_LIMITER) {
+      this.position.angle -= TURN_FORCE * Storage.deltaTime
+      if (this.velocity.x > MAX_FRICTION) {
+        this.velocity.y -= this.velocity.x * FRICTION_FORCE * Storage.deltaTime
+      }
+    }
+  }
+
+  turnRight() {
+    if (getVectorLength(this.velocity.x, this.velocity.y) > TURN_LIMITER) {
+      this.position.angle += TURN_FORCE * Storage.deltaTime
+      if (this.velocity.x > MAX_FRICTION) {
+        this.velocity.y += this.velocity.x * FRICTION_FORCE * Storage.deltaTime
+      }
+    }
+  }
+
+  brake() {
+    this.velocity.x -= Storage.deltaTime * BRAKE
+  }
+
+  acceleration() {
+    this.velocity.x += Storage.deltaTime * THROTTLE
+  }
+
+  isCollidingWithRacingTrack(track: Track): boolean {
+    return false
+  }
+
+  toRespawn() {
+    
   }
 }

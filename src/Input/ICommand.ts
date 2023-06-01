@@ -1,5 +1,5 @@
 import { Car } from "../models/Car";
 
-interface ICommand {
+export interface ICommand {
   execute(car: Car): void
 }

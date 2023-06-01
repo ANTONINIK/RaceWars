@@ -18,7 +18,6 @@ export class Storage {
       Storage._data['SPAWN_CAR_POSITION_X'] = 0
       Storage._data['SPAWN_CAR_POSITION_Y'] = 0
       Storage._data['SPAWN_CAR_POSITION_ANGLE'] = 0
-      Storage.save()
     }
   }
 
@@ -34,18 +33,21 @@ export class Storage {
     this._deltaTime = deltaTime
   }
 
-  private static save(): void {
+  public static save(): void {
     localStorage.setItem('data', JSON.stringify(this._data))
   }
 
   public static setData(key: string, value: string) {
     this._data[key] = value
-    this.save()
   }
 
   public static getData(key: string): string {
     return this._data[key].toString()
   }
+}
+
+window.onunload = () => {
+  Storage.save()
 }
 
 const StorageInstance = Storage.instance
