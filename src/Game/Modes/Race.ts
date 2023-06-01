@@ -2,7 +2,7 @@ import { Car } from '../../models/Car.js'
 import { Track } from '../../models/Track.js'
 import { GameWorld } from '../../models/GameWorld.js'
 import { IGameMode } from './IGameMode.js'
-import { Background } from '../../models/BackGround.js'
+import { Background } from '../../models/Background.js'
 
 export class Race implements IGameMode {
   execute(gameworld: GameWorld): void {
