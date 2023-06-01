@@ -2,14 +2,14 @@ import { Storage } from '../storage/Storage.js'
 import { getVectorLength, rotateObject } from '../utils.js'
 import { Track } from './Track.js'
 
-const X_GRIP_FORCE: number = 0.9
-const Y_GRIP_FORCE: number = 1.3
-const THROTTLE: number = 225
-const BRAKE: number = 130
-const TURN_FORCE: number = 2.4
-const FRICTION_FORCE: number = 1.3
-const MAX_FRICTION: number = 50
-const TURN_LIMITER: number = 10
+const X_GRIP_FORCE = 0.9
+const Y_GRIP_FORCE = 1.3
+const THROTTLE = 225
+const BRAKE = 130
+const TURN_FORCE = 2.4
+const FRICTION_FORCE = 1.3
+const MAX_FRICTION = 50
+const TURN_LIMITER = 10
 
 export class Car implements IGameObject {
   private name: string
@@ -25,17 +25,17 @@ export class Car implements IGameObject {
     this.position = {
       x: +Storage.getData('SPAWN_CAR_POSITION_X'),
       y: +Storage.getData('SPAWN_CAR_POSITION_Y'),
-      angle: +Storage.getData('SPAWN_CAR_POSITION_ANGLE')
+      angle: +Storage.getData('SPAWN_CAR_POSITION_ANGLE'),
     }
     this.velocity = {
       x: 0,
-      y: 0
+      y: 0,
     }
     this.tireTracks = []
     this.color = {
       body: Storage.getData('COLOR_CAR_BODY'),
       roof: Storage.getData('COLOR_CAR_ROOF'),
-      tireTracks: Storage.getData('COLOR_CAR_TIRE_TRACKS')
+      tireTracks: Storage.getData('COLOR_CAR_TIRE_TRACKS'),
     }
     this.width = 30
     this.height = 15
@@ -58,7 +58,7 @@ export class Car implements IGameObject {
     ctx.translate(this.position.x, this.position.y)
     ctx.rotate(this.position.angle)
     ctx.roundRect(-this.width / 2, -this.height / 2, this.width, this.height, [
-      5
+      5,
     ])
     ctx.fill()
     ctx.restore()
@@ -123,7 +123,5 @@ export class Car implements IGameObject {
     return false
   }
 
-  toRespawn() {
-    
-  }
+  toRespawn() {}
 }

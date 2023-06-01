@@ -1,5 +1,5 @@
-import { GameLoop } from "./GameLoop.js"
-import { Race } from "./modes/Race.js"
+import { GameLoop } from './GameLoop.js'
+import { Race } from './modes/Race.js'
 
 export class Menu {
   private closeBtn: HTMLElement
@@ -25,7 +25,7 @@ export class Menu {
   private gameLoop: GameLoop
 
   constructor() {
-    this.gameLoop = new GameLoop();
+    this.gameLoop = new GameLoop()
 
     this.closeBtn = document.getElementById('close-btn')
     this.closeBtnIn = document.getElementById('close-btn-inner')
@@ -59,8 +59,7 @@ export class Menu {
       this.toggleMainMenu()
     })
 
-    this.closeBtnIn.addEventListener('click', () => {
-    })
+    this.closeBtnIn.addEventListener('click', () => {})
 
     this.trackEditorBtn.addEventListener('click', () => {})
 

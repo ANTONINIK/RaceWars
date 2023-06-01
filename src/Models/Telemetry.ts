@@ -1,3 +1,1 @@
-export class Telemetry {
-  
-}
+export class Telemetry {}

@@ -1,5 +1,5 @@
-import { Car } from "../models/Car";
+import { Car } from '../models/Car'
 
-export interface ICommand {
+export type ICommand = {
   execute(car: Car): void
 }

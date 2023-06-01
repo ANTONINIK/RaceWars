@@ -1,6 +1,6 @@
-import { Menu } from "./game/Menu.js"
+import { Menu } from './game/Menu.js'
 
 function main(): void {
-  new Menu
+  new Menu()
 }
 main()

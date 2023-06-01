@@ -5,7 +5,7 @@ export function rotateObject(
 ): { x: number; y: number } {
   return {
     x: Math.cos(angle) * x + Math.sin(angle) * y,
-    y: Math.sin(angle) * x - Math.cos(angle) * y
+    y: Math.sin(angle) * x - Math.cos(angle) * y,
   }
 }
 

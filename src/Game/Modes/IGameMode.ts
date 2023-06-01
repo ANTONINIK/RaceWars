@@ -1,5 +1,5 @@
-import { GameWorld } from "../../models/GameWorld.js";
+import { GameWorld } from '../../models/GameWorld.js'
 
-export interface IGameMode {
+export type IGameMode = {
   execute(gameworld: GameWorld): void
 }
