@@ -18,8 +18,7 @@ export class Storage {
       Storage._data['COLOR_CAR_BODY'] = 'red'
       Storage._data['COLOR_CAR_ROOF'] = 'blue'
       Storage._data['COLOR_CAR_TIRE_TRACKS'] = 'grey'
-      Storage._data['SPAWN_CAR_POSITION_X'] = 0
-      Storage._data['SPAWN_CAR_POSITION_Y'] = 0
+      Storage._data['SPAWN_CAR_POSITION'] = new Vector2(0, 0)
       Storage._data['SPAWN_CAR_POSITION_ANGLE'] = 0
       Storage._data['TRACK_POINTS'] = [
         new Point(new Vector2(121, 94), true),
@@ -54,7 +53,7 @@ export class Storage {
     localStorage.setItem('data', JSON.stringify(this._data))
   }
 
-  public static setData(key: string, value: string) {
+  public static setData(key: string, value: any) {
     this._data[key] = value
   }
 

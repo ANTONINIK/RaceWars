@@ -34,6 +34,40 @@ export class Track implements IGameObject {
     this.secondLine = this.computeTrackLine(this.mainLine, -this.trackWidth)
   }
 
+  capturePoint(event: MouseEvent) {
+    const x = event.offsetX
+    const y = event.offsetY
+    this.movingPointIndex = this.points.findIndex(point => {
+      return (
+        Math.abs(point.coordinate.x - x) <= 7 &&
+        Math.abs(point.coordinate.y - y) <= 7
+      )
+    })
+
+    if (this.points[this.movingPointIndex] && this.editorMode) {
+      this.capturedPoint = true
+    }
+  }
+  movePoint(event: MouseEvent) {
+    if (this.capturedPoint) {
+      this.points[this.movingPointIndex].coordinate.x = event.offsetX
+      this.points[this.movingPointIndex].coordinate.y = event.offsetY
+      if (this.movingPointIndex % 3 === 0) {
+        if (this.movingPointIndex === 0) {
+          this.points[this.points.length - 1].coordinate.x +=
+            event.offsetX - this.points[this.movingPointIndex].coordinate.x
+          this.points[this.points.length - 1].coordinate.y +=
+            event.offsetY - this.points[this.movingPointIndex].coordinate.y
+        } else {
+          this.points[this.movingPointIndex - 1].coordinate.x +=
+            event.offsetX - this.points[this.movingPointIndex].coordinate.x
+          this.points[this.movingPointIndex - 1].coordinate.y +=
+            event.offsetY - this.points[this.movingPointIndex].coordinate.y
+        }
+      }
+    }
+  }
+
   private updatePoints(): void {
     this.points[1].coordinate.x =
       2 * this.points[0].coordinate.x - this.points[11].coordinate.x
@@ -68,30 +102,21 @@ export class Track implements IGameObject {
   }
 
   private updateCarRespawn(): void {
-    // const offset = 50
-    // const point1 = this.mainLine[this.mainLine.length - offset]
-    // const point2 = this.mainLine[this.mainLine.length - offset + 1]
-    // if (point1 && point2) {
-    //   this.carRespawn.coordinate = point2
-    //   this.carRespawn.rotationAngle = Math.atan2(
-    //     point2.y - point1.y,
-    //     point2.x - point1.x
-    //   )
-    // }
+    const offset: number = 50
+    const point1: Vector2 = this.mainLine[this.mainLine.length - offset]
+    const point2: Vector2 = this.mainLine[this.mainLine.length - offset + 1]
+    if (point1 && point2) {
+      Storage.setData('SPAWN_CAR_POSITION', point2)
+      Storage.setData(
+        'SPAWN_CAR_POSITION_ANGLE',
+        Math.atan2(point2.y - point1.y, point2.x - point1.x)
+      )
+    }
   }
 
-  // subscribeToEvents(canvas: HTMLCanvasElement): void {
-  //   canvas.addEventListener('mousedown', this.mouseDown.bind(this))
-  //   canvas.addEventListener('mousemove', this.mouseMove.bind(this))
-  //   canvas.addEventListener('mouseup', this.mouseUp.bind(this))
-  // }
-
   private computeTrackLine(coords: Vector2[], ratio: number): Vector2[] {
-    const line: { x: number; y: number }[] = []
-    const n = {
-      x: 0,
-      y: 0,
-    }
+    const line: Vector2[] = []
+    const n: Vector2 = new Vector2(0, 0)
     for (let i = 0; i < coords.length; i++) {
       n.x = -coords[(i + 1) % coords.length].y + coords[i].y
       n.y = coords[(i + 1) % coords.length].x - coords[i].x
@@ -106,7 +131,7 @@ export class Track implements IGameObject {
   }
 
   private computeBezierCurve(points: Point[], step = 0.01): Vector2[] {
-    const coords: { x: number; y: number }[] = []
+    const coords: Vector2[] = []
     for (let i = 0; i < points.length; i += 3) {
       for (let t = 0; t <= 1; t += step) {
         coords.push(
@@ -126,43 +151,6 @@ export class Track implements IGameObject {
     }
     return coords
   }
-
-  // private mouseDown(event: MouseEvent): void {
-  //   const x = event.offsetX
-  //   const y = event.offsetY
-  //   this.movingPointIndex = this.points.findIndex(coordinate => {
-  //     return Math.abs(coordinate.x - x) <= 7 && Math.abs(coordinate.y - y) <= 7
-  //   })
-
-  //   if (this.points[this.movingPointIndex] && this.editorMode) {
-  //     this.capturedPoint = true
-  //   }
-  // }
-
-  // private mouseMove(event: MouseEvent): void {
-  //   if (this.capturedPoint) {
-  //     this.points[this.movingPointIndex].x = event.offsetX
-  //     this.points[this.movingPointIndex].y = event.offsetY
-  //     if (this.movingPointIndex % 3 === 0) {
-  //       if (this.movingPointIndex === 0) {
-  //         this.points[this.points.length - 1].x +=
-  //           event.offsetX - this.points[this.movingPointIndex].x
-  //         this.points[this.points.length - 1].y +=
-  //           event.offsetY - this.points[this.movingPointIndex].y
-  //       } else {
-  //         this.points[this.movingPointIndex - 1].x +=
-  //           event.offsetX - this.points[this.movingPointIndex].x
-  //         this.points[this.movingPointIndex - 1].y +=
-  //           event.offsetY - this.points[this.movingPointIndex].y
-  //       }
-  //     }
-  //     this.update()
-  //   }
-  // }
-
-  // private mouseUp(event: MouseEvent): void {
-  //   this.capturedPoint = false
-  // }
 
   draw(ctx: CanvasRenderingContext2D): void {
     this.drawCurve(ctx, this.firstLine)

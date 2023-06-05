@@ -1,3 +1,3 @@
 export type ICommand = {
-  execute(gameObject: IGameObject): void
+  execute(gameObject: IGameObject, event?: MouseEvent): void
 }

@@ -24,10 +24,7 @@ export class Car implements IGameObject {
   constructor() {
     this.name = Storage.getData('CAR_NAME')
     this.position = {
-      coordinate: new Vector2(
-        Storage.getData('SPAWN_CAR_POSITION_X'),
-        Storage.getData('SPAWN_CAR_POSITION_Y')
-      ),
+      coordinate: Storage.getData('SPAWN_CAR_POSITION'),
       turningAngle: Storage.getData('SPAWN_CAR_POSITION_ANGLE'),
     }
     this.velocity = {
@@ -192,10 +189,7 @@ export class Car implements IGameObject {
 
   toRespawn() {
     this.position = {
-      coordinate: new Vector2(
-        Storage.getData('SPAWN_CAR_POSITION_X'),
-        Storage.getData('SPAWN_CAR_POSITION_Y')
-      ),
+      coordinate: Storage.getData('SPAWN_CAR_POSITION'),
       turningAngle: Storage.getData('SPAWN_CAR_POSITION_ANGLE'),
     }
   }

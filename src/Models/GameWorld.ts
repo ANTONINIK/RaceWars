@@ -33,29 +33,29 @@ export class GameWorld {
   }
 
   update(): void {
-    InputHandler.update();
-  
-    let car: Car | undefined;
-    let track: Track | undefined;
-  
+    InputHandler.update()
+
+    let car: Car | undefined
+    let track: Track | undefined
+
     for (const gameObject of this.gameObjects) {
       if (gameObject instanceof Car) {
-        car = gameObject;
+        car = gameObject
       } else if (gameObject instanceof Track) {
-        track = gameObject;
+        track = gameObject
       }
     }
-  
+
     if (car && track) {
       if (car.isCollidingWithRacingTrack(track)) {
-       // car.toRespawn();
+        car.toRespawn()
       }
     }
-  
+
     this.gameObjects.forEach(gameObject => {
-      gameObject.update();
-      gameObject.draw(this.context);
-    });
+      gameObject.update()
+      gameObject.draw(this.context)
+    })
   }
 
   startRendering(): void {

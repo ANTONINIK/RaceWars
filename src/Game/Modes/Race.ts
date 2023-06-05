@@ -16,6 +16,6 @@ export class Race implements IGameMode {
     gameWorld.add(new Telemetry())
     gameWorld.add(player)
 
-    InputHandler.start(player)
+    InputHandler.setPlayer(player)
   }
 }
