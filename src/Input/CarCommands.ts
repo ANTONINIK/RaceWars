@@ -1,23 +1,23 @@
-import { Car } from '../models/Car'
-import { ICommand } from './ICommand'
+import { Car } from '../models/Car.js'
+import { ICommand } from './ICommand.js'
 
-class TurnLeftCommand implements ICommand {
+export class TurnLeftCommand implements ICommand {
   execute(car: Car) {
     car.turnLeft()
   }
 }
 
-class TurnRightCommand implements ICommand {
+export class TurnRightCommand implements ICommand {
   execute(car: Car) {
     car.turnRight()
   }
 }
-class BrakeCommand implements ICommand {
+export class BrakeCommand implements ICommand {
   execute(car: Car) {
     car.brake()
   }
 }
-class AccelerationCommand implements ICommand {
+export class AccelerationCommand implements ICommand {
   execute(car: Car) {
     car.acceleration()
   }

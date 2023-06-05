@@ -1,5 +1,5 @@
+import { InputHandler } from '../input/InputHandler.js'
 import { Storage } from '../storage/Storage.js'
-import { Background } from './Background.js'
 import { Car } from './Car.js'
 import { Track } from './Track.js'
 
@@ -7,8 +7,6 @@ export class GameWorld {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
   private gameObjects: IGameObject[] = []
-  private track: Track
-  private background: Background
   private previousTimeStamp: number
 
   constructor() {
@@ -16,14 +14,8 @@ export class GameWorld {
     this.context = this.canvas.getContext('2d')
     this.canvas.style.width = Storage.getData('WIDTH')
     this.canvas.style.height = Storage.getData('HEIGHT')
-    this.canvas.width = +Storage.getData('DPI_WIDTH')
-    this.canvas.height = +Storage.getData('DPI_HEIGHT')
-
-    this.track = new Track()
-    this.background = new Background()
-
-    this.add(this.track)
-    this.add(this.background)
+    this.canvas.width = Storage.getData('DPI_WIDTH')
+    this.canvas.height = Storage.getData('DPI_HEIGHT')
   }
 
   add(gameObject: IGameObject): void {
@@ -41,16 +33,29 @@ export class GameWorld {
   }
 
   update(): void {
-    this.gameObjects.forEach(gameObject => {
-      gameObject.update()
-
-      // Проверка коллизии между машиной и трассой
-      if (gameObject instanceof Car && this.track instanceof Track) {
-        if (gameObject.isCollidingWithRacingTrack(this.track)) {
-          gameObject.toRespawn()
-        }
+    InputHandler.update();
+  
+    let car: Car | undefined;
+    let track: Track | undefined;
+  
+    for (const gameObject of this.gameObjects) {
+      if (gameObject instanceof Car) {
+        car = gameObject;
+      } else if (gameObject instanceof Track) {
+        track = gameObject;
       }
-    })
+    }
+  
+    if (car && track) {
+      if (car.isCollidingWithRacingTrack(track)) {
+       // car.toRespawn();
+      }
+    }
+  
+    this.gameObjects.forEach(gameObject => {
+      gameObject.update();
+      gameObject.draw(this.context);
+    });
   }
 
   startRendering(): void {

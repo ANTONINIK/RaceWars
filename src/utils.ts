@@ -1,14 +1,12 @@
-export function rotateObject(
-  x: number,
-  y: number,
-  angle: number
-): { x: number; y: number } {
-  return {
-    x: Math.cos(angle) * x + Math.sin(angle) * y,
-    y: Math.sin(angle) * x - Math.cos(angle) * y,
-  }
+import { Vector2 } from './models/Vector2.js'
+
+export function rotateObject(point: Vector2, turningAngle: number): Vector2 {
+  return new Vector2(
+    Math.cos(turningAngle) * point.x + Math.sin(turningAngle) * point.y,
+    Math.sin(turningAngle) * point.x - Math.cos(turningAngle) * point.y
+  )
 }
 
-export function getVectorLength(x: number, y: number): number {
-  return Math.sqrt(x * x + y * y)
+export function getVectorLength(point: Vector2): number {
+  return Math.sqrt(point.x * point.x + point.y * point.y)
 }

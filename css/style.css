@@ -138,8 +138,8 @@ p {
   flex-direction: column;
   align-items: center;
   border-radius: 4px;
-  background-color: rgb(24, 25, 32, 0.5);
-  background-image: url(/assets/img/1300231.svg);
+  background-color: rgb(37, 38, 43);
+  background-image: url(../public/back.svg);
   width: 1026px;
   height: 578px;
   position: absolute;

@@ -1,6 +1,9 @@
+import { Point } from '../models/Track.js'
+import { Vector2 } from '../models/Vector2.js'
+
 export class Storage {
   private static _instance: Storage
-  private static _data: { [key: string]: number | string }
+  private static _data: { [key: string]: any }
   private static _deltaTime: number
 
   private constructor() {
@@ -8,7 +11,7 @@ export class Storage {
     if (!Storage._data) {
       Storage._data = {}
       Storage._data['WIDTH'] = 512
-      Storage._data['HEIGHT'] = 512
+      Storage._data['HEIGHT'] = 288
       Storage._data['DPI_HEIGHT'] = Storage._data['HEIGHT'] * 2
       Storage._data['DPI_WIDTH'] = Storage._data['WIDTH'] * 2
       Storage._data['CAR_NAME'] = 'Anton'
@@ -18,6 +21,20 @@ export class Storage {
       Storage._data['SPAWN_CAR_POSITION_X'] = 0
       Storage._data['SPAWN_CAR_POSITION_Y'] = 0
       Storage._data['SPAWN_CAR_POSITION_ANGLE'] = 0
+      Storage._data['TRACK_POINTS'] = [
+        new Point(new Vector2(121, 94), true),
+        new Point(new Vector2(149, 110), false),
+        new Point(new Vector2(654, 39), true),
+        new Point(new Vector2(777, 69), true),
+        new Point(new Vector2(0, 0), false),
+        new Point(new Vector2(981, 336), true),
+        new Point(new Vector2(906, 390), true),
+        new Point(new Vector2(0, 0), false),
+        new Point(new Vector2(326, 454), true),
+        new Point(new Vector2(191, 392), true),
+        new Point(new Vector2(0, 0), false),
+        new Point(new Vector2(33, 46), true),
+      ]
     }
   }
 
@@ -41,8 +58,8 @@ export class Storage {
     this._data[key] = value
   }
 
-  public static getData(key: string): string {
-    return this._data[key].toString()
+  public static getData(key: string): any {
+    return this._data[key]
   }
 }
 

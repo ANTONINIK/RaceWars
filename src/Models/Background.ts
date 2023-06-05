@@ -7,8 +7,8 @@ export class Background implements IGameObject {
     ctx.fillRect(
       0,
       0,
-      +Storage.getData('DPI_WIDTH'),
-      +Storage.getData('DPI_HEIGHT')
+      Storage.getData('DPI_WIDTH'),
+      Storage.getData('DPI_HEIGHT')
     )
     ctx.closePath()
   }
