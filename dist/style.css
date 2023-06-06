@@ -140,7 +140,7 @@ p {
   align-items: center;
   border-radius: 4px;
   background-color: rgb(37, 38, 43);
-  background-image: url(/assets/back.svg);
+  background-image: url(./back.svg);
   width: 1026px;
   height: 578px;
   position: absolute;
