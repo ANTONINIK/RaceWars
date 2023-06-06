@@ -3,83 +3,109 @@ import { Track } from '../models/Track.js'
 import {
   AccelerationCommand,
   BrakeCommand,
+  CarCommand,
   TurnLeftCommand,
   TurnRightCommand,
-} from './CarCommands.js'
-import { ICommand } from './ICommand.js'
+} from './CarCommand.js'
 import { InputAction } from './InputAction.js'
-import { CapturePointCommand, MovePointCommand } from './TrackCommands.js'
+import {
+  CapturePointCommand,
+  MovePointCommand,
+  ReleasePointCommand,
+  TrackCommand,
+} from './TrackCommand.js'
 
 export class InputHandler {
   private static _instance: InputHandler
-  private static _bindActions: {
-    [name: string]: { action: InputAction; command: ICommand }
-  } = {}
-  private static _player: Car
-  private static _track: Track
-
-  private constructor() {
-    this.addAction('W', new InputAction([87]), new AccelerationCommand())
-    this.addAction('S', new InputAction([83]), new BrakeCommand())
-    this.addAction('A', new InputAction([65]), new TurnLeftCommand())
-    this.addAction('D', new InputAction([68]), new TurnRightCommand())
-
-    this.addAction('C', new InputAction([150]), new CapturePointCommand())
-    this.addAction('M', new InputAction([151]), new MovePointCommand())
-
-    window.addEventListener('keydown', event => {
-      for (const action of Object.values(InputHandler._bindActions)) {
-        if (action.action.checkKeyCode(event.keyCode)) {
-          action.action.pressed = true
-        }
-      }
-    })
-
-    window.addEventListener('keyup', event => {
-      for (const action of Object.values(InputHandler._bindActions)) {
-        if (action.action.checkKeyCode(event.keyCode)) {
-          action.action.pressed = false
-        }
-      }
-    })
-
-    const canvas = document.getElementById('canvas') as HTMLCanvasElement
-    canvas.addEventListener('mousedown', event => {
-      InputHandler._bindActions['C'].action.pressed = true
-    })
-    canvas.addEventListener('mousemove', event => {
-      InputHandler._bindActions['M'].action.pressed = true
-    })
-    canvas.addEventListener('mouseup', event => {
-      InputHandler._bindActions['C'].action.pressed = false
-      InputHandler._bindActions['M'].action.pressed = false
-    })
+  private static _keyboardActions: {
+    [name: string]: { action: InputAction; command: CarCommand }
+  }
+  private static _mouseActions: {
+    [name: string]: TrackCommand
   }
 
   public static get instance(): InputHandler {
     return this._instance || (this._instance = new this())
   }
 
-  public addAction(name: string, action: InputAction, command: ICommand): void {
-    InputHandler._bindActions[name] = {
+  constructor() {
+    window.addEventListener('keydown', event => {
+      for (const item of Object.values(InputHandler._keyboardActions)) {
+        if (item.action.checkKeyCode(event.keyCode)) {
+          item.action.pressed = true
+        }
+      }
+    })
+
+    window.addEventListener('keyup', event => {
+      for (const item of Object.values(InputHandler._keyboardActions)) {
+        if (item.action.checkKeyCode(event.keyCode)) {
+          item.action.pressed = false
+        }
+      }
+    })
+
+    const canvas = document.getElementById('canvas') as HTMLCanvasElement
+    canvas.addEventListener('mousedown', event => {
+      InputHandler._mouseActions['click']?.execute(event)
+    })
+    canvas.addEventListener('mousemove', event => {
+      InputHandler._mouseActions['move']?.execute(event)
+    })
+    canvas.addEventListener('mouseup', event => {
+      InputHandler._mouseActions['release']?.execute(event)
+    })
+  }
+
+  public static initKeyboardActions(car: Car) {
+    this.addKeyboardAction('W', new InputAction([87]), new AccelerationCommand(car))
+    this.addKeyboardAction('S', new InputAction([83]), new BrakeCommand(car))
+    this.addKeyboardAction('A', new InputAction([65]), new TurnLeftCommand(car))
+    this.addKeyboardAction('D', new InputAction([68]), new TurnRightCommand(car))
+  }
+
+  public static initMouseActions(track: Track) {
+    this.addMouseAction('click', new CapturePointCommand(track))
+    this.addMouseAction('move', new MovePointCommand(track))
+    this.addMouseAction('release', new ReleasePointCommand(track))
+  }
+
+  public static removeKeyboardActions() {
+    InputHandler._keyboardActions = {}
+  }
+
+  public static removeMouseActions() {
+    InputHandler._mouseActions = {}
+  }
+
+  private static addKeyboardAction(
+    name: string,
+    action: InputAction,
+    command: CarCommand
+  ): void {
+    if (!InputHandler._keyboardActions) {
+      InputHandler._keyboardActions = {}
+    }
+
+    InputHandler._keyboardActions[name] = {
       action,
       command,
     }
   }
 
-  public static setTrack(track: Track) {
-    this._track = track
-  }
-  
-  public static setPlayer(car: Car) {
-    this._player = car
+  private static addMouseAction(name: string, command: TrackCommand): void {
+    if (!InputHandler._mouseActions) {
+      InputHandler._mouseActions = {}
+    }
+
+    InputHandler._mouseActions[name] = command
   }
 
-  public static update(): void {
-    if (this._player) {
-      for (const action of Object.values(InputHandler._bindActions)) {
-        if (action.action.pressed) {
-          action.command.execute(this._player)
+  public static updateKeyboardActions(): void {
+    if (InputHandler._keyboardActions) {
+      for (const item of Object.values(InputHandler._keyboardActions)) {
+        if (item.action.pressed) {
+          item.command.execute()
         }
       }
     }

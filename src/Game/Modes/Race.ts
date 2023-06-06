@@ -8,14 +8,13 @@ import { IGameMode } from './IGameMode.js'
 
 export class Race implements IGameMode {
   execute(gameWorld: GameWorld): void {
-    const player: Car = new Car()
-
     gameWorld.remove()
+
+    const car: Car = new Car();
     gameWorld.add(new Background())
     gameWorld.add(new Track(false))
     gameWorld.add(new Telemetry())
-    gameWorld.add(player)
-
-    InputHandler.setPlayer(player)
+    gameWorld.add(car)
+    InputHandler.initKeyboardActions(car)
   }
 }

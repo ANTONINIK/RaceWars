@@ -34,7 +34,7 @@ export class Track implements IGameObject {
     this.secondLine = this.computeTrackLine(this.mainLine, -this.trackWidth)
   }
 
-  capturePoint(event: MouseEvent) {
+  capturePoint(event: MouseEvent): void {
     const x = event.offsetX
     const y = event.offsetY
     this.movingPointIndex = this.points.findIndex(point => {
@@ -48,7 +48,7 @@ export class Track implements IGameObject {
       this.capturedPoint = true
     }
   }
-  movePoint(event: MouseEvent) {
+  movePoint(event: MouseEvent): void {
     if (this.capturedPoint) {
       this.points[this.movingPointIndex].coordinate.x = event.offsetX
       this.points[this.movingPointIndex].coordinate.y = event.offsetY
@@ -66,6 +66,10 @@ export class Track implements IGameObject {
         }
       }
     }
+  }
+
+  releasePoint(event: MouseEvent): void {
+    this.capturedPoint = false
   }
 
   private updatePoints(): void {

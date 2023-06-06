@@ -23,6 +23,8 @@ export class GameWorld {
   }
 
   remove(): void {
+    InputHandler.removeKeyboardActions()
+    InputHandler.removeMouseActions()
     this.gameObjects = []
   }
 
@@ -33,8 +35,6 @@ export class GameWorld {
   }
 
   update(): void {
-    InputHandler.update()
-
     let car: Car | undefined
     let track: Track | undefined
 
@@ -65,6 +65,8 @@ export class GameWorld {
       }
       Storage.deltaTime = (timestamp - this.previousTimeStamp) / 1000
       this.previousTimeStamp = timestamp
+
+      InputHandler.updateKeyboardActions()
 
       this.update()
       this.draw()

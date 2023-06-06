@@ -1,5 +1,6 @@
 import { GameLoop } from './GameLoop.js'
 import { Race } from './modes/Race.js'
+import { TrackEditor } from './modes/TrackEditor.js'
 
 export class Menu {
   private closeBtn: HTMLElement
@@ -59,17 +60,35 @@ export class Menu {
       this.toggleMainMenu()
     })
 
-    this.closeBtnIn.addEventListener('click', () => {})
+    this.closeBtnIn.addEventListener('click', () => {
+      this.toggleSecondMenu()
+      this.carSettings.classList.add('hidden')
+      this.bestLaps.classList.add('hidden')
+    })
 
-    this.trackEditorBtn.addEventListener('click', () => {})
+    this.trackEditorBtn.addEventListener('click', () => {
+      this.toggleMainMenu()
+      this.saveTrackBtn.classList.toggle('hidden')
+      this.gameLoop.setGameMode(new TrackEditor())
+      this.gameLoop.executeGameMode()
+    })
 
-    this.saveTrackBtn.addEventListener('click', () => {})
+    this.saveTrackBtn.addEventListener('click', () => {
+      this.toggleMainMenu()
+    })
 
-    this.carSettingsBtn.addEventListener('click', () => {})
+    this.carSettingsBtn.addEventListener('click', () => {
+      this.toggleSecondMenu()
+      this.carSettings.classList.toggle('hidden')
+    })
 
-    this.form.addEventListener('submit', () => {})
+    this.form.addEventListener('submit', () => {
 
-    this.bestLapsBtn.addEventListener('click', () => {})
+    })
+
+    this.bestLapsBtn.addEventListener('click', () => {
+
+    })
   }
 
   private toggleMainMenu() {

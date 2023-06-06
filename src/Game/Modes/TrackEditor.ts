@@ -6,12 +6,11 @@ import { IGameMode } from './IGameMode.js'
 
 export class TrackEditor implements IGameMode {
   execute(gameWorld: GameWorld): void {
-    const track: Track = new Track(true)
-
     gameWorld.remove()
+
+    const track: Track = new Track(true);
     gameWorld.add(new Background())
     gameWorld.add(track)
-
-    InputHandler.setTrack(track)
+    InputHandler.initMouseActions(track)
   }
 }
