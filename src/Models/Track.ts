@@ -156,6 +156,10 @@ export class Track implements IGameObject {
     return coords
   }
 
+  public getCheckPoints(): Vector2[]  {
+    return this.checkPoints
+  }
+
   draw(ctx: CanvasRenderingContext2D): void {
     this.drawCurve(ctx, this.firstLine)
     this.drawCurve(ctx, this.secondLine)

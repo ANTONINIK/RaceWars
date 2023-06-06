@@ -27,10 +27,7 @@ export class Car implements IGameObject {
       coordinate: Storage.getData('SPAWN_CAR_POSITION'),
       turningAngle: Storage.getData('SPAWN_CAR_POSITION_ANGLE'),
     }
-    this.velocity = {
-      x: 0,
-      y: 0,
-    }
+    this.velocity = new Vector2(0, 0)
     this.tireTracks = []
     this.color = {
       body: Storage.getData('COLOR_CAR_BODY'),
@@ -39,6 +36,10 @@ export class Car implements IGameObject {
     }
     this.width = 30
     this.height = 15
+  }
+
+  getPosition(): { coordinate: Vector2; turningAngle: number } {
+    return this.position
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -134,6 +135,7 @@ export class Car implements IGameObject {
   }
 
   update(): void {
+    console.log(this.position)
     this.velocity.x *= -X_GRIP_FORCE * Storage.deltaTime + 1
     this.velocity.y *= -Y_GRIP_FORCE * Storage.deltaTime + 1
     const projection: Vector2 = rotateObject(
@@ -192,5 +194,6 @@ export class Car implements IGameObject {
       coordinate: Storage.getData('SPAWN_CAR_POSITION'),
       turningAngle: Storage.getData('SPAWN_CAR_POSITION_ANGLE'),
     }
+    this.velocity = new Vector2(0, 0)
   }
 }

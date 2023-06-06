@@ -1,6 +1,7 @@
 import { InputHandler } from '../input/InputHandler.js'
 import { Storage } from '../storage/Storage.js'
 import { Car } from './Car.js'
+import { Telemetry } from './Telemetry.js'
 import { Track } from './Track.js'
 
 export class GameWorld {
@@ -25,6 +26,11 @@ export class GameWorld {
   remove(): void {
     InputHandler.removeKeyboardActions()
     InputHandler.removeMouseActions()
+    this.gameObjects.forEach((gameObject: IGameObject) => {
+      if (gameObject instanceof Telemetry) {
+        gameObject.display()
+      }
+    })
     this.gameObjects = []
   }
 
@@ -38,13 +44,13 @@ export class GameWorld {
     let car: Car | undefined
     let track: Track | undefined
 
-    for (const gameObject of this.gameObjects) {
+    this.gameObjects.forEach(gameObject => {
       if (gameObject instanceof Car) {
         car = gameObject
       } else if (gameObject instanceof Track) {
         track = gameObject
       }
-    }
+    })
 
     if (car && track) {
       if (car.isCollidingWithRacingTrack(track)) {

@@ -30,30 +30,40 @@ export class InputHandler {
 
   constructor() {
     window.addEventListener('keydown', event => {
-      for (const item of Object.values(InputHandler._keyboardActions)) {
-        if (item.action.checkKeyCode(event.keyCode)) {
-          item.action.pressed = true
+      if (InputHandler._keyboardActions) {
+        for (const item of Object.values(InputHandler._keyboardActions)) {
+          if (item.action.checkKeyCode(event.keyCode)) {
+            item.action.pressed = true
+          }
         }
       }
     })
 
     window.addEventListener('keyup', event => {
-      for (const item of Object.values(InputHandler._keyboardActions)) {
-        if (item.action.checkKeyCode(event.keyCode)) {
-          item.action.pressed = false
+      if (InputHandler._keyboardActions) {
+        for (const item of Object.values(InputHandler._keyboardActions)) {
+          if (item.action.checkKeyCode(event.keyCode)) {
+            item.action.pressed = false
+          }
         }
       }
     })
 
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
     canvas.addEventListener('mousedown', event => {
-      InputHandler._mouseActions['click']?.execute(event)
+      if (InputHandler._mouseActions) {
+        InputHandler._mouseActions['click'].execute(event)
+      }
     })
     canvas.addEventListener('mousemove', event => {
-      InputHandler._mouseActions['move']?.execute(event)
+      if (InputHandler._mouseActions) {
+        InputHandler._mouseActions['move'].execute(event)
+      }
     })
     canvas.addEventListener('mouseup', event => {
-      InputHandler._mouseActions['release']?.execute(event)
+      if (InputHandler._mouseActions) {
+        InputHandler._mouseActions['release'].execute(event)
+      }
     })
   }
 
@@ -71,11 +81,11 @@ export class InputHandler {
   }
 
   public static removeKeyboardActions() {
-    InputHandler._keyboardActions = {}
+    InputHandler._keyboardActions = null
   }
 
   public static removeMouseActions() {
-    InputHandler._mouseActions = {}
+    InputHandler._mouseActions = null
   }
 
   private static addKeyboardAction(

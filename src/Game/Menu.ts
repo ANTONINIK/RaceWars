@@ -1,3 +1,4 @@
+import { Storage } from '../storage/Storage.js'
 import { GameLoop } from './GameLoop.js'
 import { Race } from './modes/Race.js'
 import { TrackEditor } from './modes/TrackEditor.js'
@@ -8,10 +9,10 @@ export class Menu {
   private startBtn: HTMLElement
   private trackEditorBtn: HTMLElement
   private saveTrackBtn: HTMLElement
-  private carName: HTMLElement
-  private carColor: HTMLElement
-  private carRoof: HTMLElement
-  private carTrack: HTMLElement
+  private carName: HTMLInputElement
+  private carColor: HTMLInputElement
+  private carRoof: HTMLInputElement
+  private carTrack: HTMLInputElement
   private demoCar: HTMLElement
   private demoRoof: HTMLElement
   private carSettings: HTMLElement
@@ -33,10 +34,10 @@ export class Menu {
     this.startBtn = document.getElementById('start-btn')
     this.trackEditorBtn = document.getElementById('track-editor-btn')
     this.saveTrackBtn = document.getElementById('save-track-btn')
-    this.carName = document.getElementById('carName')
-    this.carColor = document.getElementById('carColor')
-    this.carRoof = document.getElementById('carRoof')
-    this.carTrack = document.getElementById('carTrack')
+    this.carName = document.getElementById('carName') as HTMLInputElement
+    this.carColor = document.getElementById('carColor') as HTMLInputElement
+    this.carRoof = document.getElementById('carRoof') as HTMLInputElement
+    this.carTrack = document.getElementById('carTrack') as HTMLInputElement
     this.demoCar = document.getElementById('demo-car')
     this.demoRoof = document.getElementById('demo-roof')
     this.carSettings = document.getElementById('car-settings')
@@ -80,14 +81,48 @@ export class Menu {
     this.carSettingsBtn.addEventListener('click', () => {
       this.toggleSecondMenu()
       this.carSettings.classList.toggle('hidden')
+
+      this.carName.value = Storage.getData('CAR_NAME')
+      this.carTrack.value = Storage.getData('COLOR_CAR_TIRE_TRACKS')
+      this.demoCar.style.background = this.carColor.value =
+        Storage.getData('COLOR_CAR_BODY')
+      this.demoRoof.style.background = this.carRoof.value =
+        Storage.getData('COLOR_CAR_ROOF')
     })
 
-    this.form.addEventListener('submit', () => {
-
+    this.form.addEventListener('submit', event => {
+      event.preventDefault()
+      Storage.setData('CAR_NAME', this.carName.value)
+      Storage.setData('COLOR_CAR_TIRE_TRACKS', this.carTrack.value)
+      Storage.setData('COLOR_CAR_BODY', this.carColor.value)
+      Storage.setData('COLOR_CAR_ROOF', this.carRoof.value)
+      this.demoCar.style.background = this.carColor.value
+      this.demoRoof.style.background = this.carRoof.value
     })
 
     this.bestLapsBtn.addEventListener('click', () => {
-
+      this.toggleSecondMenu()
+      this.bestLaps.classList.toggle('hidden')
+      const bestLaps: { name: string; lapTime: number }[] =
+        Storage.getData('BEST_LAPS')
+      if (bestLaps) {
+        const table: HTMLTableElement = document.getElementById(
+          'myTable'
+        ) as HTMLTableElement
+        const rowCount = table.rows.length
+        for (let i = 0; i < rowCount; i++) {
+          table.deleteRow(i)
+        }
+        bestLaps.forEach(lap => {
+          const newRow = this.tbodyRef.insertRow()
+          let newCell = newRow.insertCell()
+          let newText = document.createTextNode(lap.name)
+          newCell.appendChild(newText)
+          newCell = newRow.insertCell()
+          newText = document.createTextNode(lap.lapTime.toFixed(3))
+          newCell.appendChild(newText)
+        })
+      }
     })
   }
 

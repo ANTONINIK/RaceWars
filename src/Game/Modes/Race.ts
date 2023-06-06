@@ -10,10 +10,11 @@ export class Race implements IGameMode {
   execute(gameWorld: GameWorld): void {
     gameWorld.remove()
 
-    const car: Car = new Car();
+    const car: Car = new Car()
+    const track: Track = new Track(false)
     gameWorld.add(new Background())
-    gameWorld.add(new Track(false))
-    gameWorld.add(new Telemetry())
+    gameWorld.add(track)
+    gameWorld.add(new Telemetry(car, track))
     gameWorld.add(car)
     InputHandler.initKeyboardActions(car)
   }

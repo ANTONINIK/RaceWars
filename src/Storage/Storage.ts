@@ -15,13 +15,13 @@ export class Storage {
       Storage._data['DPI_HEIGHT'] = Storage._data['HEIGHT'] * 2
       Storage._data['DPI_WIDTH'] = Storage._data['WIDTH'] * 2
       Storage._data['CAR_NAME'] = 'Anton'
-      Storage._data['COLOR_CAR_BODY'] = 'red'
-      Storage._data['COLOR_CAR_ROOF'] = 'blue'
-      Storage._data['COLOR_CAR_TIRE_TRACKS'] = 'grey'
-      Storage._data['SPAWN_CAR_POSITION'] = new Vector2(0, 0)
-      Storage._data['SPAWN_CAR_POSITION_ANGLE'] = 0
+      Storage._data['COLOR_CAR_BODY'] = '#fa3d2f'
+      Storage._data['COLOR_CAR_ROOF'] = '#4287ff'
+      Storage._data['COLOR_CAR_TIRE_TRACKS'] = '#cccccc'
+      Storage._data['SPAWN_CAR_POSITION'] = new Vector2(71.71, 197.4)
+      Storage._data['SPAWN_CAR_POSITION_ANGLE'] = -1.722
       Storage._data['TRACK_POINTS'] = [
-        new Point(new Vector2(121, 94), true),
+        new Point(new Vector2(138, 70), true),
         new Point(new Vector2(149, 110), false),
         new Point(new Vector2(654, 39), true),
         new Point(new Vector2(777, 69), true),
@@ -32,8 +32,9 @@ export class Storage {
         new Point(new Vector2(326, 454), true),
         new Point(new Vector2(191, 392), true),
         new Point(new Vector2(0, 0), false),
-        new Point(new Vector2(33, 46), true),
+        new Point(new Vector2(33, 70), true),
       ]
+      Storage._data['BEST_LAPS'] = []
     }
   }
 
